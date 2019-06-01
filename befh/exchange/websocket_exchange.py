@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import time
 
 from cryptofeed import FeedHandler
 from cryptofeed.defines import L2_BOOK, TRADES, BID, ASK
@@ -136,8 +137,11 @@ class WebsocketExchange(RestApiExchange):
         utcstr_timestamp_exchanges = ['bitmex', 'okex']
         str_timestamp_exchanges = ['bitstamp']
         if self._name.lower() in utcstr_timestamp_exchanges:
-            timestamp = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
-            timestamp = timestamp.timestamp()
+            if type(timestamp) is float: # bitmex ws time is in float utc
+                timestamp = time.mktime(time.localtime(timestamp))
+            else:
+                timestamp = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+                timestamp = timestamp.timestamp()
             trade['timestamp'] = timestamp
         elif self._name.lower() in str_timestamp_exchanges:
             trade['timestamp'] = float(timestamp)

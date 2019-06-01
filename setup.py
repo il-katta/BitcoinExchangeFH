@@ -12,6 +12,8 @@ requirements = [
     'sqlalchemy>=1.1.11',
     'alembic>=0.9.3',
     'pyzmq>=17.1.2',
+    'aiodns>=1.1.1',
+    'cryptofeed>=0.22.2'
 ]
 
 setup_requirements = [
